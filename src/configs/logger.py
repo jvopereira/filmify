@@ -1,7 +1,7 @@
+"""Logger configuration module with custom formatting and color support"""
 import logging
 import sys
 from typing import Optional
-
 
 class CustomFormatter(logging.Formatter):
     """Custom log formatter with colors for better readability."""
@@ -49,19 +49,19 @@ def get_logger(
     Returns:
         logging.Logger: Configured logger instance.
     """
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
+    logger_instance = logging.getLogger(name)
+    logger_instance.setLevel(level)
 
     # Prevent duplicated handlers
-    if not logger.handlers:
+    if not logger_instance.handlers:
         handler = logging.StreamHandler(sys.stdout)
         handler.setLevel(level)
 
         formatter = CustomFormatter()
         handler.setFormatter(formatter)
-        logger.addHandler(handler)
+        logger_instance.addHandler(handler)
 
-    return logger
+    return logger_instance
 
 
 # Default logger for global usage
