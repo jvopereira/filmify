@@ -1,14 +1,25 @@
+"""Preprocessing module for loading and merging datasets"""
 import pandas as pd
-from src.configs.datasets import MOVIES_DATASET_PATH, RATINGS_DATASET_PATH, TAGS_DATASET_PATH, LINKS_DATASET_PATH
+from src.configs.logger import logger
+from src.configs.datasets import MOVIES_DATASET_PATH, RATINGS_DATASET_PATH
 
-def load_movies_dataset():
-    return pd.read_csv(MOVIES_DATASET_PATH)
+class Preprocessing:
+    """Handles loading, merging, and logging of movie and rating datasets for preprocessing"""
+    def __init__(self):
+        self.logger = logger
 
-def load_ratings_dataset():
-    return pd.read_csv(RATINGS_DATASET_PATH)
+        self.logger.info("Loading movies dataset")
+        self.movies_df = pd.read_csv(MOVIES_DATASET_PATH)
+        self.logger.info("Movies dataset loaded successfully: %s", self.movies_df.head())
 
-def load_tags_dataset():
-    return pd.read_csv(TAGS_DATASET_PATH)
+        self.logger.info("Loading ratings dataset")
+        self.ratings_df = pd.read_csv(RATINGS_DATASET_PATH)
+        self.logger.info("Ratings dataset loaded successfully: %s", self.ratings_df.head())
 
-def load_links_dataset():
-    return pd.read_csv(LINKS_DATASET_PATH)
+        self.merged_df = self._merge_datasets()
+        self.logger.info("Merged dataset created successfully: %s", self.merged_df.head())
+
+    def _merge_datasets(self):
+        """Merge movies and ratings datasets on movieId"""
+        self.logger.info("Merging datasets")
+        return self.ratings_df.merge(self.movies_df, on="movieId")
